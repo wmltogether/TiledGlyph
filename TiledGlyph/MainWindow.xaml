@@ -1,0 +1,26 @@
+﻿<mui:ModernWindow x:Class="TiledGlyph.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TiledGlyph"
+        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        mc:Ignorable="d"
+        Title="Tiled Glyph (Bitmap Font Generator)" IsTitleVisible="True"
+        Height="633" Width="850" MinWidth="850" MinHeight="480"
+        ContentSource="/PagePrev.xaml">
+    <mui:ModernWindow.MenuLinkGroups>
+        <mui:LinkGroup DisplayName="Generator" >
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Image Preview" Source="/PagePrev.xaml" />
+                <mui:Link DisplayName="Settings" Source="/PageSettings.xaml" />
+                <mui:Link DisplayName="Characters" Source="/PageCharacter.xaml"/>
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="@about">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="about" Source="/PageAbout.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+    </mui:ModernWindow.MenuLinkGroups>
+</mui:ModernWindow>
