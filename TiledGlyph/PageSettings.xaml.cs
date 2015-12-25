@@ -38,6 +38,15 @@ namespace TiledGlyph
             return true;
         }
 
+        private bool checkIntStr(string str)
+        {
+            Regex r = new Regex(@"^[+-]?([1-9][0-9]*|0)(\.[0-9]+)?%?$");
+            if (!r.IsMatch(str))
+            {
+                return false;
+            }
+            return true;
+        }
         /*
         * 
         * 
@@ -220,9 +229,8 @@ namespace TiledGlyph
         private void textboxRPositionX_TextChanged(object sender, TextChangedEventArgs e)
         {
             string tc = textboxRPositionX.Text.Trim();
-            if (!checkNumbic(tc))
+            if (!checkIntStr(tc))
             {
-                textboxRPositionX.Text = "0";
                 return;
             }
             int RPositionX = Convert.ToInt32(tc);
@@ -237,9 +245,8 @@ namespace TiledGlyph
         private void textboxRpositionY_TextChanged(object sender, TextChangedEventArgs e)
         {
             string tc = textboxRpositionY.Text.Trim();
-            if (!checkNumbic(tc))
+            if (!checkIntStr(tc))
             {
-                textboxRpositionY.Text = "0";
                 return;
             }
             int RPositionY = Convert.ToInt32(tc);
