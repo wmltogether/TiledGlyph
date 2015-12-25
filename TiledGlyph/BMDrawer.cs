@@ -168,7 +168,7 @@ namespace TiledGlyph
                         if (x + this.tile_width > this.image_width)
                         {
                             x = 0;
-                            y += this.tile_width;
+                            y += this.tile_height;
                         }
                         continue;
                     }
@@ -190,7 +190,7 @@ namespace TiledGlyph
                         if (x + this.tile_width > this.image_width)
                         {
                             x = 0;
-                            y += this.tile_width;
+                            y += this.tile_height;
                         }
                         continue;
                     }
@@ -210,7 +210,7 @@ namespace TiledGlyph
                         if (x + this.tile_width > this.image_width)
                         {
                             x = 0;
-                            y += this.tile_width;
+                            y += this.tile_height;
                         }
                         continue;
                     }
@@ -240,7 +240,7 @@ namespace TiledGlyph
                 if (x + this.tile_width > this.image_width)
                 {
                     x = 0;
-                    y += this.tile_width;
+                    y += this.tile_height;
                 }
 
 

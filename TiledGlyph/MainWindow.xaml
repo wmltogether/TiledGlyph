@@ -8,7 +8,10 @@
         mc:Ignorable="d"
         Title="Tiled Glyph (Bitmap Font Generator)" IsTitleVisible="True"
         Height="633" Width="850" MinWidth="850" MinHeight="480"
-        ContentSource="/PagePrev.xaml">
+        ContentSource="/PagePrev.xaml" WindowStyle="None" ResizeMode="CanMinimize">
+    <mui:ModernWindow.Effect>
+        <DropShadowEffect/>
+    </mui:ModernWindow.Effect>
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="Generator" >
             <mui:LinkGroup.Links>

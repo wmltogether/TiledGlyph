@@ -58,18 +58,18 @@ namespace TiledGlyph
                                 //
                                 System.Windows.Media.Pen pen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.Red, (double)0.5f);
                                 drawingContext.DrawImage(image.Source, new Rect(0, 0, image.Source.Width, image.Source.Height));
-                                int x_lines = (int)Math.Round((float)image.Source.Width / (float)GlobalSettings.iTileWidth);
+                                int x_lines = (int)Math.Round((float)(int)image.Width / (float)GlobalSettings.iTileWidth);
 
-                                int y_lines = (int)Math.Round((float)image.Source.Height / (float)GlobalSettings.iTileHeight); ;
+                                int y_lines = (int)Math.Round((float)(int)image.Height / (float)GlobalSettings.iTileHeight); ;
                                 for (int i = 0; i < x_lines + 1; i++)
                                 {
                                     drawingContext.DrawLine(pen, new System.Windows.Point(i * GlobalSettings.iTileWidth, 0),
-                                        new System.Windows.Point(i * GlobalSettings.iTileWidth, image.Source.Height));
+                                        new System.Windows.Point(i * GlobalSettings.iTileWidth, (float)(int)image.Height));
                                 }
                                 for (int i = 0; i < y_lines + 1; i++)
                                 {
                                     drawingContext.DrawLine(pen, new System.Windows.Point(0, i * GlobalSettings.iTileHeight),
-                                        new System.Windows.Point(image.Source.Height, i * GlobalSettings.iTileHeight));
+                                        new System.Windows.Point((float)(int)image.Width, i * GlobalSettings.iTileHeight));
                                 }
                                 drawingContext.Close();
                                 RenderTargetBitmap nbmp = new RenderTargetBitmap((int)image.Width, (int)image.Height, 96.0, 96.0, PixelFormats.Default);
