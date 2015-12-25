@@ -51,7 +51,7 @@ namespace TiledGlyph
         * 
         * 
         */
-        private void textboxTileWidth_TextChanged(object sender, TextChangedEventArgs e)
+        private void textboxTileWidth_LostFocus(object sender, RoutedEventArgs e)
         {
             string tc = textboxTileWidth.Text.Trim();
             if (!checkNumbic(tc))
@@ -68,7 +68,7 @@ namespace TiledGlyph
             GlobalSettings.iTileWidth = tileWidth;
         }
 
-        private void textboxTileHeight_TextChanged(object sender, TextChangedEventArgs e)
+        private void textboxTileHeight_LostFocus(object sender, RoutedEventArgs e)
         {
             string tc = textboxTileHeight.Text.Trim();
             if (!checkNumbic(tc))
@@ -85,7 +85,7 @@ namespace TiledGlyph
             GlobalSettings.iTileHeight = tileHeight;
         }
 
-        private void textboxImageWidth_TextChanged(object sender, TextChangedEventArgs e)
+        private void textboxImageWidth_LostFocus(object sender, RoutedEventArgs e)
         {
             string tc = textboxImageWidth.Text.Trim();
             if (!checkNumbic(tc) || tc.Length < 1)
@@ -101,7 +101,7 @@ namespace TiledGlyph
             GlobalSettings.iImageWidth = imageWidth;
         }
 
-        private void textboxImageHeight_TextChanged(object sender, TextChangedEventArgs e)
+        private void textboxImageHeight_LostFocus(object sender, RoutedEventArgs e)
         {
             string tc = textboxImageHeight.Text.Trim();
             if (!checkNumbic(tc) || tc.Length < 1)
@@ -117,7 +117,7 @@ namespace TiledGlyph
             GlobalSettings.iImageHeight = imageHeight;
         }
 
-        private void textboxFontHeight_TextChanged(object sender, TextChangedEventArgs e)
+        private void textboxFontHeight_LostFocus(object sender, RoutedEventArgs e)
         {
             string tc = textboxFontHeight.Text.Trim();
             if (!checkNumbic(tc))
@@ -226,7 +226,7 @@ namespace TiledGlyph
             }
         }
 
-        private void textboxRPositionX_TextChanged(object sender, TextChangedEventArgs e)
+        private void textboxRPositionX_LostFocus(object sender, RoutedEventArgs e)
         {
             string tc = textboxRPositionX.Text.Trim();
             if (!checkIntStr(tc))
@@ -242,7 +242,7 @@ namespace TiledGlyph
             GlobalSettings.relativePositionX = RPositionX;
         }
 
-        private void textboxRpositionY_TextChanged(object sender, TextChangedEventArgs e)
+        private void textboxRpositionY_LostFocus(object sender, RoutedEventArgs e)
         {
             string tc = textboxRpositionY.Text.Trim();
             if (!checkIntStr(tc))
@@ -257,7 +257,6 @@ namespace TiledGlyph
             }
             GlobalSettings.relativePositionY = RPositionY;
         }
-
 
     }
 }

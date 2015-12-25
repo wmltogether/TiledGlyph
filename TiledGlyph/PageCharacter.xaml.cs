@@ -82,23 +82,26 @@ namespace TiledGlyph
             if (GlobalSettings.iFontHeight < 8)
             {
                 result = false;
-                message += "Error: Font Size too small.";
+                message = "Error: Font Size too small.";
             }
-
+            if ((currentImageHeight == 0) || (currentImageWidth == 0)){
+                result = false;
+                message = "Error: Image can't set to zero";
+            }
             if ((currentImageHeight < currentTileHeight) || (currentImageWidth < currentTileWidth))
             {
                 result = false;
-                message += "Error: Image too small or Tile too large.";
+                message = "Error: Image too small or Tile too large.";
             }
             if (currentBgColor == currentPenColor)
             {
                 result = false;
-                message += "Error: Pen Color can't be equal to background color";
+                message = "Error: Pen Color can't be equal to background color";
             }
             if (!File.Exists(GlobalSettings.fFontName))
             {
                 result = false;
-                message += "Error: true type font font not found";
+                message = "Error: true type font font not found";
             }
             return result;
 

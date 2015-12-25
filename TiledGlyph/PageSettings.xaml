@@ -13,11 +13,11 @@
     <Grid Style="{StaticResource ContentRoot}">
 
         <Label Content="Tile Width * Height :" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textboxTileHeight" HorizontalAlignment="Left" Height="23" Margin="252,22,0,0" TextWrapping="Wrap" Text="24" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1" TextChanged="textboxTileHeight_TextChanged"/>
-        <TextBox x:Name="textboxTileWidth" TextChanged="textboxTileWidth_TextChanged"  HorizontalAlignment="Left" Height="23" Margin="171,22,0,0" TextWrapping="Wrap" Text="24" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
+        <TextBox x:Name="textboxTileHeight" LostFocus="textboxTileHeight_LostFocus" HorizontalAlignment="Left" Height="23" Margin="252,22,0,0" TextWrapping="Wrap" Text="24" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1" />
+        <TextBox x:Name="textboxTileWidth" LostFocus="textboxTileWidth_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="171,22,0,0" TextWrapping="Wrap" Text="24" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
         <Label Content="Image Width * Height :" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textboxImageWidth" HorizontalAlignment="Left" Height="23" Margin="171,58,0,0" TextWrapping="Wrap" Text="512" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1" TextChanged="textboxImageWidth_TextChanged"/>
-        <TextBox x:Name="textboxImageHeight" HorizontalAlignment="Left" Height="23" Margin="252,58,0,0" TextWrapping="Wrap" Text="512" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1" TextChanged="textboxImageHeight_TextChanged"/>
+        <TextBox x:Name="textboxImageWidth" HorizontalAlignment="Left" Height="23" Margin="171,58,0,0" TextWrapping="Wrap" Text="512" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1" LostFocus="textboxImageWidth_LostFocus"/>
+        <TextBox x:Name="textboxImageHeight" HorizontalAlignment="Left" Height="23" Margin="252,58,0,0" TextWrapping="Wrap" Text="512" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1" LostFocus="textboxImageHeight_LostFocus"/>
         <CheckBox x:Name="checkboxUseUHeight" Content="Use Unlimited Height" HorizontalAlignment="Left" Margin="338,25,0,0" VerticalAlignment="Top" Checked="checkboxUseUHeight_Checked" Unchecked="checkboxUseUHeight_UnChecked"/>
         <ComboBox x:Name="comboboxRenderMode" HorizontalAlignment="Left" Margin="171,104,0,0" VerticalAlignment="Top" Width="147" SelectionChanged="comboboxRenderMode_SelectionChanged">
             <ComboBoxItem Content="Normal" HorizontalAlignment="Left" Width="147" IsSelected="True"/>
@@ -39,7 +39,7 @@
             <ComboBoxItem Content=".bin(WHXY Binary)" HorizontalAlignment="Left" Width="118"/>
         </ComboBox>
         <mui:ModernButton x:Name="buttonRefresh" Content="Force Refresh" HorizontalAlignment="Left" Margin="338,101,0,0" VerticalAlignment="Top" Click="buttonRefresh_Click"/>
-        <TextBox x:Name="textboxFontHeight" TextChanged="textboxFontHeight_TextChanged"  HorizontalAlignment="Left" Height="23" Margin="415,58,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
+        <TextBox x:Name="textboxFontHeight" LostFocus="textboxFontHeight_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="415,58,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
         <Label Content="Font Size:" HorizontalAlignment="Left" Margin="338,61,0,0" VerticalAlignment="Top"/>
 
         <xctk:ColorPicker x:Name="penColorPicker" SelectedColorChanged="penColorPicker_SelectedColorChanged"  HorizontalAlignment="Left" Margin="171,181,0,0" VerticalAlignment="Top" Width="108" BorderBrush="Black" Height="23" ColorMode="ColorPalette" Foreground="#FF686868">
@@ -130,8 +130,8 @@
             <ComboBoxItem Content="BMP" HorizontalAlignment="Left" Width="147"/>
         </ComboBox>
         <Label Content="Relative position :" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textboxRPositionX" TextChanged="textboxRPositionX_TextChanged"  HorizontalAlignment="Left" Height="23" Margin="171,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
-        <TextBox x:Name="textboxRpositionY" TextChanged="textboxRpositionY_TextChanged"  HorizontalAlignment="Left" Height="23" Margin="252,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
+        <TextBox x:Name="textboxRPositionX" LostFocus="textboxRPositionX_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="171,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
+        <TextBox x:Name="textboxRpositionY" LostFocus="textboxRpositionY_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="252,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
 
     </Grid>
 </UserControl>
