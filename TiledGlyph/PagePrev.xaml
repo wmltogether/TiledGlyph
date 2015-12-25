@@ -12,5 +12,6 @@
         <mui:ModernButton x:Name="testButton" Content="Preview Bitmap" HorizontalAlignment="Left" Margin="584,54,0,0" VerticalAlignment="Top" Click="testButton_Click"/>
         <TextBox x:Name="characterTextBox" HorizontalAlignment="Left" Height="251" Margin="560,123,0,0" TextWrapping="Wrap" Text=" !&quot;#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~過ぎてゆく季節に、置いてきた宝物、大切なピースの欠けた、パズルだね、白い雪が街に、優しく積もるように、アルバムの空白を全部、埋めてしまおう" VerticalAlignment="Top" Width="186" AcceptsReturn="True"/>
         <Label Content="Preview Label" HorizontalAlignment="Left" Margin="560,102,0,0" VerticalAlignment="Top" Width="186"/>
+        <CheckBox x:Name="checkboxShowLine" Content="Show Tile Grid" HorizontalAlignment="Left" Margin="584,398,0,0" VerticalAlignment="Top" Checked="checkboxShowLine_Checked" Unchecked="checkboxShowLine_Unchecked"/>
     </Grid>
 </UserControl>
