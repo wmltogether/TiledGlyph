@@ -50,7 +50,7 @@ namespace TiledGlyph
                 textboxTileWidth.Text = "16";
                 return;
             }
-            int tileWidth = int.Parse(tc);
+            int tileWidth = Convert.ToInt32(tc);
             if (tileWidth > 128)
             {
                 textboxTileWidth.Text = "16";
@@ -67,7 +67,7 @@ namespace TiledGlyph
                 textboxTileHeight.Text = "16";
                 return;
             }
-            int tileHeight = int.Parse(tc);
+            int tileHeight = Convert.ToInt32(tc);
             if (tileHeight > 128)
             {
                 textboxTileHeight.Text = "16";
@@ -79,15 +79,14 @@ namespace TiledGlyph
         private void textboxImageWidth_TextChanged(object sender, TextChangedEventArgs e)
         {
             string tc = textboxImageWidth.Text.Trim();
-            if (!checkNumbic(tc))
+            if (!checkNumbic(tc) || tc.Length < 1)
             {
-                textboxImageWidth.Text = "512";
                 return;
             }
-            int imageWidth = int.Parse(tc);
+
+            int imageWidth = Convert.ToInt32(tc);
             if (imageWidth < 16)
             {
-                textboxImageWidth.Text = "512";
                 return;
             }
             GlobalSettings.iImageWidth = imageWidth;
@@ -96,15 +95,14 @@ namespace TiledGlyph
         private void textboxImageHeight_TextChanged(object sender, TextChangedEventArgs e)
         {
             string tc = textboxImageHeight.Text.Trim();
-            if (!checkNumbic(tc))
+            if (!checkNumbic(tc) || tc.Length < 1)
             {
                 textboxImageHeight.Text = "512";
                 return;
             }
-            int imageHeight = int.Parse(tc);
+            int imageHeight = Convert.ToInt32(tc);
             if (imageHeight < 16)
             {
-                textboxImageHeight.Text = "512";
                 return;
             }
             GlobalSettings.iImageHeight = imageHeight;
@@ -118,7 +116,7 @@ namespace TiledGlyph
                 textboxFontHeight.Text = "16";
                 return;
             }
-            int fontHeight = int.Parse(tc);
+            int fontHeight = Convert.ToInt32(tc);
             if (fontHeight > 128)
             {
                 textboxFontHeight.Text = "16";
@@ -136,12 +134,12 @@ namespace TiledGlyph
         private void buttonRefresh_Click(object sender, RoutedEventArgs e)
         {
 
-            GlobalSettings.iTileWidth = int.Parse(textboxTileWidth.Text.Trim());
-            GlobalSettings.iTileHeight = int.Parse(textboxTileHeight.Text.Trim());
-            GlobalSettings.iFontHeight = int.Parse(textboxFontHeight.Text.Trim());
+            GlobalSettings.iTileWidth = Convert.ToInt32(textboxTileWidth.Text.Trim());
+            GlobalSettings.iTileHeight = Convert.ToInt32(textboxTileHeight.Text.Trim());
+            GlobalSettings.iFontHeight = Convert.ToInt32(textboxFontHeight.Text.Trim());
             GlobalSettings.iGRenderMode = comboboxRenderMode.SelectedIndex;
-            GlobalSettings.iImageWidth = int.Parse(textboxImageWidth.Text.Trim());
-            GlobalSettings.iImageHeight = int.Parse(textboxImageHeight.Text.Trim());
+            GlobalSettings.iImageWidth = Convert.ToInt32(textboxImageWidth.Text.Trim());
+            GlobalSettings.iImageHeight = Convert.ToInt32(textboxImageHeight.Text.Trim());
             GlobalSettings.fFontName = textbox_FontName.Text;
             
 
@@ -227,7 +225,7 @@ namespace TiledGlyph
                 textboxRPositionX.Text = "0";
                 return;
             }
-            int RPositionX = int.Parse(tc);
+            int RPositionX = Convert.ToInt32(tc);
             if (RPositionX > GlobalSettings.iFontHeight)
             {
                 textboxRPositionX.Text = "0";
@@ -244,7 +242,7 @@ namespace TiledGlyph
                 textboxRpositionY.Text = "0";
                 return;
             }
-            int RPositionY = int.Parse(tc);
+            int RPositionY = Convert.ToInt32(tc);
             if (RPositionY > GlobalSettings.iFontHeight)
             {
                 textboxRpositionY.Text = "0";

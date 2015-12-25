@@ -6,7 +6,7 @@
              xmlns:mui="http://firstfloorsoftware.com/ModernUI" x:Class="TiledGlyph.PagePrev" 
              mc:Ignorable="d" d:DesignHeight="611" Width="788">
     <Grid Style="{StaticResource ContentRoot}">
-        <ScrollViewer HorizontalAlignment="Left" Height="542" Margin="10,24,0,0" VerticalAlignment="Top" Width="536" CanContentScroll="True" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer HorizontalAlignment="Left" Height="371" Margin="10,24,0,0" VerticalAlignment="Top" Width="545" CanContentScroll="True" HorizontalScrollBarVisibility="Auto">
             <Image x:Name="image" Height="509" Width="512" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </ScrollViewer>
         <mui:ModernButton x:Name="testButton" Content="Preview Bitmap" HorizontalAlignment="Left" Margin="584,54,0,0" VerticalAlignment="Top" Click="testButton_Click"/>

@@ -45,6 +45,8 @@ namespace TiledGlyph
 
                         Bitmap bmp = bmd.test_draw(teststrings);
                         BitmapImage cbmp = BitmapToBitmapImage(bmp);
+                        image.Height = cbmp.Height;
+                        image.Width = cbmp.Width;
                         image.Source = cbmp;
                     })
                );

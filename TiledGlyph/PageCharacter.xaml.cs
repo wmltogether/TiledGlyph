@@ -58,7 +58,7 @@ namespace TiledGlyph
             }
 
         }
-        private bool checkBeforeRender(string message)
+        private bool checkBeforeRender(ref string message)
         {
             bool result = true;
             int currentTileWidth = GlobalSettings.iTileHeight;
@@ -82,23 +82,23 @@ namespace TiledGlyph
             if (GlobalSettings.iFontHeight < 8)
             {
                 result = false;
-                message = "Error: Font Size too small.";
+                message += "Error: Font Size too small.";
             }
 
             if ((currentImageHeight < currentTileHeight) || (currentImageWidth < currentTileWidth))
             {
                 result = false;
-                message = "Error: Image too small or Tile too large.";
+                message += "Error: Image too small or Tile too large.";
             }
             if (currentBgColor == currentPenColor)
             {
                 result = false;
-                message = "Error: Pen Color can't be equal to background color";
+                message += "Error: Pen Color can't be equal to background color";
             }
             if (!File.Exists(GlobalSettings.fFontName))
             {
                 result = false;
-                message = "Error: true type font font not found";
+                message += "Error: true type font font not found";
             }
             return result;
 
@@ -107,7 +107,7 @@ namespace TiledGlyph
         private void buttonSaveImage_Click(object sender, RoutedEventArgs e)
         {
             string message = "";
-            bool checkResult = checkBeforeRender(message);
+            bool checkResult = checkBeforeRender(ref message);
             if (checkResult == false)
             {
                 System.Windows.MessageBox.Show(message);

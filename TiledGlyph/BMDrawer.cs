@@ -12,8 +12,8 @@ namespace TiledGlyph
 {
     class BMDrawer
     {
-        GlobalSettings gSettings = new GlobalSettings(); 
-        string fontName = "Font/NotoSansCJKsc-Regular.otf";
+        GlobalSettings gSettings = new GlobalSettings();
+        string fontName = GlobalSettings.fFontName;
 
         private int fontHeight = GlobalSettings.iFontHeight;
         private int tile_height = GlobalSettings.iTileHeight;
