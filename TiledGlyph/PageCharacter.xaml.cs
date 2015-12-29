@@ -186,5 +186,47 @@ namespace TiledGlyph
                );
             });
         }
+
+        private void buttonSaveTable_Click(object sender, RoutedEventArgs e)
+        {
+            string message = "";
+            bool checkResult = checkBeforeRender(ref message);
+            if (checkResult == false)
+            {
+                System.Windows.MessageBox.Show(message);
+                return;
+            }
+            SaveFileDialog savefiledialog = new SaveFileDialog();
+            savefiledialog.RestoreDirectory = true;
+            savefiledialog.Filter = "Font Binary（*.bin）|*.bin";
+            if (savefiledialog.ShowDialog() == true)
+            {
+                string saveFileName = savefiledialog.FileName;
+                FileStream fs = new FileStream(saveFileName, FileMode.Create, FileAccess.Write);
+                BinaryWriter baseStream = new BinaryWriter(fs);
+                BMDrawer bmd = new BMDrawer();
+                Table.XYWH[] XYWHS = bmd.GetXYWHTable(characterTextBox.Text);
+                baseStream.BaseStream.WriteByte(0x46);
+                baseStream.BaseStream.WriteByte(0x4E);
+                baseStream.BaseStream.WriteByte(0x54);
+                baseStream.BaseStream.WriteByte(0x42);
+                baseStream.Write(BitConverter.GetBytes(XYWHS.Length));
+                foreach (var v in XYWHS)
+                {
+
+                    baseStream.Write(BitConverter.GetBytes(v.charid));
+                    baseStream.Write(BitConverter.GetBytes(v.x_pos));
+                    baseStream.Write(BitConverter.GetBytes(v.y_pos));
+                    baseStream.Write(BitConverter.GetBytes(v.c_width));
+                    baseStream.Write(BitConverter.GetBytes(v.c_height));
+                    baseStream.Write(BitConverter.GetBytes(v.page_num));
+                }
+                baseStream.Close();
+                fs.Close();
+            }
+            
+
+
+        }
     }
 }

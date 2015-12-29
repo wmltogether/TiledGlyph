@@ -10,6 +10,20 @@ using System.IO;
 
 namespace TiledGlyph
 {
+    public class Table
+    {
+        public XYWH[] XYWHS;
+        public struct XYWH
+        {
+            public uint charid;
+            public uint x_pos;
+            public uint y_pos;
+            public uint c_width;
+            public uint c_height;
+            public uint page_num;
+
+        }
+    }
     class BMDrawer
     {
         GlobalSettings gSettings = new GlobalSettings();
@@ -21,6 +35,8 @@ namespace TiledGlyph
         private int image_width = GlobalSettings.iImageWidth;
         private int image_height = GlobalSettings.iImageHeight;
         private string fTextStrings = GlobalSettings.fTextStrings;
+        
+
         private enum render_mode
         {
             freetype_normal = 0 ,
@@ -35,6 +51,69 @@ namespace TiledGlyph
         {
             uint ucode = (uint)Char.ConvertToUtf32(current_char, 0);
             return ucode;
+        }
+        public Table.XYWH[] GetXYWHTable(string fTextStrings)
+        {
+            List<Table.XYWH> tmp = new List<Table.XYWH>();
+            StringReader fReader = new StringReader(fTextStrings);
+            int img_nums;
+            int chars_per_page = (image_width / tile_width) * (image_height / tile_height);
+            if (fTextStrings.Length < (chars_per_page))
+            {
+                img_nums = 1;
+            }
+            else
+            {
+                img_nums = (fTextStrings.Length / chars_per_page);
+                if ((fTextStrings.Length % chars_per_page) > 0)
+                {
+                    img_nums = (fTextStrings.Length / chars_per_page) + 1;
+                }
+            }
+            for (int i = 0; i < img_nums; i++)
+            {
+                int pos = 0;
+                string currentString;
+                if (i != img_nums - 1)
+                {
+                    char[] buffer = new char[chars_per_page];
+                    fReader.Read(buffer, pos, chars_per_page);
+                    currentString = new string(buffer);
+                    pos += currentString.Length;
+                }
+                else
+                {
+                    currentString = fReader.ReadToEnd();
+                }
+                currentString = currentString.Replace("\n", "");
+                currentString = currentString.Replace("\r", "");
+                Library library = new Library();
+                Face face = library.NewFace(fontName, 0);
+                int x=0, y=0;
+                for (int n = 0; n < currentString.ToCharArray().Length; n++)
+                {
+                    Table.XYWH currentXYWH = new Table.XYWH();
+                    currentXYWH.x_pos = (uint)x;
+                    currentXYWH.y_pos = (uint)y;
+                    currentXYWH.page_num = (uint)i + 1;
+                    string currentChar0 = currentString.ToCharArray()[n].ToString();
+                    uint glyphIndex = uchar2code(currentChar0);
+                    currentXYWH.charid = glyphIndex; //set charid
+                    face.SetCharSize(0, this.fontHeight, 0, 72);
+                    face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Normal);
+                    currentXYWH.c_width = (uint)((float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width);//set c_width
+                    currentXYWH.c_height = (uint)tile_height;
+                    tmp.Add(currentXYWH);
+                    x += this.tile_width;
+                    if (x + this.tile_width > this.image_width)
+                    {
+                        x = 0;
+                        y += this.tile_height;
+                    }
+                } 
+            }
+            return tmp.ToArray();
         }
         public Bitmap[] DrawMultiImages(string fTextStrings)
         {
@@ -54,6 +133,7 @@ namespace TiledGlyph
                 }
                 
             }
+
             Bitmap[] multi = new Bitmap[img_nums];
             for (int i = 0; i < img_nums; i++)
                 {
@@ -76,8 +156,6 @@ namespace TiledGlyph
                 }
             return multi;
         }
-
-
         public static Bitmap kPasteImage(Bitmap bmp, int newW, int newH ,int kx ,int ky)
         {
             //插值缩放算法
@@ -118,7 +196,6 @@ namespace TiledGlyph
                 return null;
             }
         }
-
         public Bitmap test_draw(string teststrings)
         {
             teststrings = teststrings.Replace("\n" , "");
@@ -128,7 +205,7 @@ namespace TiledGlyph
             
             Bitmap bmp = new Bitmap((int)Math.Ceiling((double)image_width), (int)Math.Ceiling((double)image_height));
             Graphics g = Graphics.FromImage(bmp);
-            g.Clear(Color.Transparent);
+            g.Clear(GlobalSettings.cBgColor);
             //g.Clear(Color.Black);
             int x=0, y=0;
             for (int i = 0; i < teststrings.ToCharArray().Length; i++)

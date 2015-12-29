@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Drawing;
 using System.Windows.Threading;
 using System.Threading;
+using System.IO;
 
 namespace TiledGlyph
 {
@@ -26,9 +27,65 @@ namespace TiledGlyph
         {
             InitializeComponent();
         }
+        private bool checkBeforeRender(ref string message)
+        {
+            bool result = true;
+            int currentTileWidth = GlobalSettings.iTileHeight;
+            int currentTileHeight = GlobalSettings.iTileHeight;
+            int currentImageHeight = GlobalSettings.iImageHeight;
+            int currentImageWidth = GlobalSettings.iImageWidth;
+            System.Drawing.Color currentBgColor = GlobalSettings.cBgColor;
+            System.Drawing.Color currentPenColor = GlobalSettings.cPenColor;
+            bool bUseUHeight = GlobalSettings.bUseUnlimitHeight;
+            if (bUseUHeight)
+            {
+                int currentStringLength = characterTextBox.Text.Length;
+                currentImageHeight = (currentStringLength / (currentImageWidth / currentTileWidth)) * currentTileHeight;
+                if ((currentStringLength % (currentImageWidth / currentTileWidth)) != 0)
+                {
+                    currentImageHeight += currentTileHeight;
+                }
+                GlobalSettings.iImageHeight = currentImageHeight;
+            }
 
+            if (GlobalSettings.iFontHeight < 8)
+            {
+                result = false;
+                message = "Error: Font Size too small.";
+            }
+            if ((currentImageHeight == 0) || (currentImageWidth == 0))
+            {
+                result = false;
+                message = "Error: Image can't set to zero";
+            }
+            if ((currentImageHeight < currentTileHeight) || (currentImageWidth < currentTileWidth))
+            {
+                result = false;
+                message = "Error: Image too small or Tile too large.";
+            }
+            if (currentBgColor == currentPenColor)
+            {
+                result = false;
+                message = "Error: Pen Color can't be equal to background color";
+            }
+            if (!File.Exists(GlobalSettings.fFontName))
+            {
+                result = false;
+                message = "Error: true type font font not found";
+            }
+            return result;
+
+
+        }
         private void testButton_Click(object sender, RoutedEventArgs e)
         {
+            string message = "";
+            bool result = checkBeforeRender(ref message);
+            if (!result)
+            {
+                MessageBox.Show(message);
+                return;
+            }
             AsynDisplayImage();
         }
         private void AsynDisplayImage()
