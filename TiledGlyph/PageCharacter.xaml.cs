@@ -198,31 +198,54 @@ namespace TiledGlyph
             }
             SaveFileDialog savefiledialog = new SaveFileDialog();
             savefiledialog.RestoreDirectory = true;
-            savefiledialog.Filter = "Font Binary（*.bin）|*.bin";
+            savefiledialog.Filter = "Font Binary（*.bin）|*.bin|Excel csv File(*.csv)|*.csv";
             if (savefiledialog.ShowDialog() == true)
             {
                 string saveFileName = savefiledialog.FileName;
-                FileStream fs = new FileStream(saveFileName, FileMode.Create, FileAccess.Write);
-                BinaryWriter baseStream = new BinaryWriter(fs);
-                BMDrawer bmd = new BMDrawer();
-                Table.XYWH[] XYWHS = bmd.GetXYWHTable(characterTextBox.Text);
-                baseStream.BaseStream.WriteByte(0x46);
-                baseStream.BaseStream.WriteByte(0x4E);
-                baseStream.BaseStream.WriteByte(0x54);
-                baseStream.BaseStream.WriteByte(0x42);
-                baseStream.Write(BitConverter.GetBytes(XYWHS.Length));
-                foreach (var v in XYWHS)
+                int currentIndex = savefiledialog.FilterIndex;
+                FileStream fs;
+                switch (currentIndex)
                 {
+                    case 0:
+                        fs = new FileStream(saveFileName, FileMode.Create, FileAccess.Write);
+                        BinaryWriter baseStream = new BinaryWriter(fs);
+                        BMDrawer bmd = new BMDrawer();
+                        Table.XYWH[] XYWHS = bmd.GetXYWHTable(characterTextBox.Text);
+                        baseStream.BaseStream.WriteByte(0x46);
+                        baseStream.BaseStream.WriteByte(0x4E);
+                        baseStream.BaseStream.WriteByte(0x54);
+                        baseStream.BaseStream.WriteByte(0x42);
+                        baseStream.Write(BitConverter.GetBytes(XYWHS.Length));
+                        foreach (var v in XYWHS)
+                        {
 
-                    baseStream.Write(BitConverter.GetBytes(v.charid));
-                    baseStream.Write(BitConverter.GetBytes(v.x_pos));
-                    baseStream.Write(BitConverter.GetBytes(v.y_pos));
-                    baseStream.Write(BitConverter.GetBytes(v.c_width));
-                    baseStream.Write(BitConverter.GetBytes(v.c_height));
-                    baseStream.Write(BitConverter.GetBytes(v.page_num));
+                        baseStream.Write(BitConverter.GetBytes(v.charid));
+                        baseStream.Write(BitConverter.GetBytes(v.x_pos));
+                        baseStream.Write(BitConverter.GetBytes(v.y_pos));
+                        baseStream.Write(BitConverter.GetBytes(v.c_width));
+                        baseStream.Write(BitConverter.GetBytes(v.c_height));
+                        baseStream.Write(BitConverter.GetBytes(v.page_num));
+                        }
+                        baseStream.Close();
+                        fs.Close();
+                        break;
+                    case 2:
+                        fs = new FileStream(saveFileName, FileMode.Create, FileAccess.Write);
+                        StreamWriter sw = new StreamWriter(fs);
+                        BMDrawer bmd1 = new BMDrawer();
+                        Table.XYWH[] XYWHS1 = bmd1.GetXYWHTable(characterTextBox.Text);
+                        foreach (var v in XYWHS1)
+                        {
+                            sw.WriteLine(string.Format("{0},{1},{2},{3},{4},{5}" , v.charid , v.x_pos , v.y_pos ,
+                                                                                   v.c_width , v.c_height , v.page_num));
+                        }
+                        sw.Close();
+                        fs.Close();
+                        break;
+                    default:
+                        break;
                 }
-                baseStream.Close();
-                fs.Close();
+                
             }
             
 

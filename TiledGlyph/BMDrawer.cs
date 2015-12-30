@@ -102,7 +102,18 @@ namespace TiledGlyph
                     face.SetCharSize(0, this.fontHeight, 0, 72);
                     face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
                     face.Glyph.RenderGlyph(RenderMode.Normal);
-                    currentXYWH.c_width = (uint)((float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width);//set c_width
+                    float advance = (float)face.Glyph.Metrics.HorizontalAdvance;
+                    if (advance >= (float)tile_width)
+                    {
+                        currentXYWH.c_width = (uint)tile_width;
+                    }
+                    else 
+                    {
+                        currentXYWH.c_width = (uint)face.Glyph.BitmapLeft + (uint)((float)face.Glyph.Metrics.HorizontalBearingX +
+                                                                                    (float)GlobalSettings.relativePositionX + 
+                                                                                    (float)face.Glyph.Metrics.Width);
+                    }
+                    //currentXYWH.c_width = (uint)((float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width);//set c_width
                     currentXYWH.c_height = (uint)tile_height;
                     tmp.Add(currentXYWH);
                     x += this.tile_width;
