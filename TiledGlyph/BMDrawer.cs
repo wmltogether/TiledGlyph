@@ -89,6 +89,7 @@ namespace TiledGlyph
                 currentString = currentString.Replace("\r", "");
                 Library library = new Library();
                 Face face = library.NewFace(fontName, 0);
+                face.SetCharSize(0, this.fontHeight, 0, 72);
                 int x=0, y=0;
                 for (int n = 0; n < currentString.ToCharArray().Length; n++)
                 {
@@ -99,19 +100,25 @@ namespace TiledGlyph
                     string currentChar0 = currentString.ToCharArray()[n].ToString();
                     uint glyphIndex = uchar2code(currentChar0);
                     currentXYWH.charid = glyphIndex; //set charid
-                    face.SetCharSize(0, this.fontHeight, 0, 72);
                     face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
                     face.Glyph.RenderGlyph(RenderMode.Normal);
-                    float advance = (float)face.Glyph.Metrics.HorizontalAdvance;
-                    if (advance >= (float)tile_width)
+                    FTBitmap ftbmp = face.Glyph.Bitmap;
+                    if (ftbmp.Width == 0)
                     {
-                        currentXYWH.c_width = (uint)tile_width;
+                        currentXYWH.c_width = (uint)0;
                     }
-                    else 
-                    {
-                        currentXYWH.c_width = (uint)face.Glyph.BitmapLeft + (uint)((float)face.Glyph.Metrics.HorizontalBearingX +
+                    else { 
+                        float advance = (float)face.Glyph.Metrics.HorizontalAdvance;
+                        if (advance >= (float)tile_width)
+                        {
+                            currentXYWH.c_width = (uint)tile_width;
+                        }
+                        else 
+                        {
+                            currentXYWH.c_width = (uint)face.Glyph.BitmapLeft + (uint)((float)face.Glyph.Metrics.HorizontalBearingX +
                                                                                     (float)GlobalSettings.relativePositionX + 
                                                                                     (float)face.Glyph.Metrics.Width);
+                        }
                     }
                     //currentXYWH.c_width = (uint)((float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width);//set c_width
                     currentXYWH.c_height = (uint)tile_height;
@@ -122,7 +129,8 @@ namespace TiledGlyph
                         x = 0;
                         y += this.tile_height;
                     }
-                } 
+                }
+                library.Dispose();
             }
             return tmp.ToArray();
         }
@@ -334,7 +342,7 @@ namespace TiledGlyph
 
             }
             g.Dispose();
-
+            library.Dispose();
             return bmp;
 
         }

@@ -206,7 +206,7 @@ namespace TiledGlyph
                 FileStream fs;
                 switch (currentIndex)
                 {
-                    case 0:
+                    case 1:
                         fs = new FileStream(saveFileName, FileMode.Create, FileAccess.Write);
                         BinaryWriter baseStream = new BinaryWriter(fs);
                         BMDrawer bmd = new BMDrawer();
