@@ -54,6 +54,9 @@ namespace TiledGlyph
         }
         public Table.XYWH[] GetXYWHTable(string fTextStrings)
         {
+            Library library = new Library();
+            Face face = library.NewFace(fontName, 0);
+            face.SetCharSize(0, this.fontHeight, 0, 72);
             List<Table.XYWH> tmp = new List<Table.XYWH>();
             StringReader fReader = new StringReader(fTextStrings);
             int img_nums;
@@ -87,9 +90,7 @@ namespace TiledGlyph
                 }
                 currentString = currentString.Replace("\n", "");
                 currentString = currentString.Replace("\r", "");
-                Library library = new Library();
-                Face face = library.NewFace(fontName, 0);
-                face.SetCharSize(0, this.fontHeight, 0, 72);
+                
                 int x=0, y=0;
                 for (int n = 0; n < currentString.ToCharArray().Length; n++)
                 {
@@ -98,14 +99,17 @@ namespace TiledGlyph
                     currentXYWH.y_pos = (uint)y;
                     currentXYWH.page_num = (uint)i + 1;
                     string currentChar0 = currentString.ToCharArray()[n].ToString();
-                    uint glyphIndex = uchar2code(currentChar0);
+
+                    uint glyphIndex = face.GetCharIndex(uchar2code(currentChar0));
                     currentXYWH.charid = glyphIndex; //set charid
-                    face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                    face.LoadChar((uint)glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                    face.LoadGlyph((uint)glyphIndex, LoadFlags.Default, LoadTarget.Normal);
                     face.Glyph.RenderGlyph(RenderMode.Normal);
+
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
-                        currentXYWH.c_width = (uint)0;
+                        currentXYWH.c_width = (uint)tile_width;
                     }
                     else { 
                         float advance = (float)face.Glyph.Metrics.HorizontalAdvance;
@@ -129,8 +133,9 @@ namespace TiledGlyph
                         x = 0;
                         y += this.tile_height;
                     }
+                    
+                    ftbmp.Dispose();
                 }
-                library.Dispose();
             }
             return tmp.ToArray();
         }
