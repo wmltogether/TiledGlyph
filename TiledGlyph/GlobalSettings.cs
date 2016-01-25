@@ -21,6 +21,7 @@ namespace TiledGlyph
         public static string fTextStrings = "";
         public static string fFontName = "Font/NotoSansCJKsc-Regular.otf";
         public static bool bUseUnlimitHeight = false;
+        public static bool bOptmizeAlpha = false;
         public static ImageFormat globalSaveFmt = ImageFormat.Png;
 
 

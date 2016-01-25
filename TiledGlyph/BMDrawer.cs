@@ -102,9 +102,9 @@ namespace TiledGlyph
                     uint char_code = uchar2code(currentChar0);
                     uint glyphIndex = face.GetCharIndex(uchar2code(currentChar0));
                     currentXYWH.charid = char_code; //set charid
-                    face.LoadChar((uint)glyphIndex, LoadFlags.Default, LoadTarget.Normal);
-                    face.LoadGlyph((uint)glyphIndex, LoadFlags.Default, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Normal);
+                    face.LoadChar((uint)glyphIndex, LoadFlags.Render, LoadTarget.Normal);
+                    face.LoadGlyph((uint)glyphIndex, LoadFlags.Render, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Mono);
 
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
@@ -238,12 +238,12 @@ namespace TiledGlyph
                 uint glyphIndex = face.GetCharIndex(uchar2code(currentChar0));
                 
                 face.SetCharSize(0, this.fontHeight, 0, 72);
-                face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
-                face.Glyph.RenderGlyph(RenderMode.Normal);
+                face.LoadGlyph(glyphIndex, LoadFlags.Render, LoadTarget.Normal);
+                face.Glyph.RenderGlyph(RenderMode.Mono);
                 if (this.fontHeight < 14)
                 {
-                    face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Normal);
+                    face.LoadGlyph(glyphIndex, LoadFlags.Render, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Mono);
                 }
                 //获取字符对齐
                 float left = (float)face.Glyph.Metrics.HorizontalBearingX;
@@ -260,8 +260,8 @@ namespace TiledGlyph
                 if (this.grender_mode == "freetype_nearestneighbor")
                 { 
                     face.SetCharSize(0, this.fontHeight *2, 0, 72);
-                    face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Normal);
+                    face.LoadGlyph(glyphIndex, LoadFlags.Render, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Mono);
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
@@ -323,7 +323,7 @@ namespace TiledGlyph
                     Stroker stroker = new Stroker(library);
                     stroker.Set(1, StrokerLineCap.Round, StrokerLineJoin.Round, 0);
                     face.LoadGlyph(glyphIndex, LoadFlags.NoBitmap, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Mono);
                     Glyph glyph = face.Glyph.GetGlyph();
                     if (face.Glyph.Format != GlyphFormat.Outline)
                         throw new InvalidCastException("The glyph's format is not GlyphFormat.Outline.");

@@ -127,6 +127,7 @@
         <Label Content="Relative position :" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textboxRPositionX" LostFocus="textboxRPositionX_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="171,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
         <TextBox x:Name="textboxRpositionY" LostFocus="textboxRpositionY_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="252,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
+        <CheckBox x:Name="checkboxOptmizeAlpha" Content="Optmize Alpha" HorizontalAlignment="Left" Margin="338,308,0,0" VerticalAlignment="Top" Checked="checkboxOptmizeAlpha_Checked" Unchecked="checkboxOptmizeAlpha_Unchecked"/>
 
     </Grid>
 </UserControl>

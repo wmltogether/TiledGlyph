@@ -176,7 +176,30 @@ namespace TiledGlyph
                         {
                             for (int i=0; i < bmp.Length; i++)
                             {
-                                Bitmap dest = bmp[i];
+                                Bitmap tmpBmp = bmp[i];
+                                Bitmap dest = new Bitmap(tmpBmp.Width, tmpBmp.Height);
+                                if (GlobalSettings.bOptmizeAlpha == true)
+                                {
+                                    System.Drawing.Color pixel;
+                                    for (int x = 0; x < tmpBmp.Width; x++)
+                                        for (int y = 0; y < tmpBmp.Height; y++)
+                                        {
+                                            pixel = tmpBmp.GetPixel(x, y);
+                                            int r, g, b , a, Result = 0;
+                                            r = pixel.R;
+                                            g = pixel.G;
+                                            b = pixel.B;
+                                            a = pixel.A;
+                                            Result = ((int)(0.7 * r) + (int)(0.2 * g) + (int)(0.1 * b));
+                                            dest.SetPixel(x, y, System.Drawing.Color.FromArgb(Result,255,255,255));
+
+                                        }
+                                }
+                                else
+                                {
+                                    dest = tmpBmp;
+                                }
+                                
                                 dest.Save(string.Format("{0}\\font.{1}.{2}", saveFolderName, i, fmt.ToString()), fmt);
                                 dest.Dispose();
                             }

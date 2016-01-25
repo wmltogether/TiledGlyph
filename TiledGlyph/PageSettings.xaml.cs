@@ -258,5 +258,22 @@ namespace TiledGlyph
             GlobalSettings.relativePositionY = RPositionY;
         }
 
+        private void checkboxOptmizeAlpha_Checked(object sender, RoutedEventArgs e)
+        {
+            if (checkboxOptmizeAlpha.IsChecked == true)
+            {
+                GlobalSettings.bOptmizeAlpha = true;
+            }
+        }
+
+        private void checkboxOptmizeAlpha_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (checkboxOptmizeAlpha.IsChecked == false)
+            {
+                GlobalSettings.bOptmizeAlpha = false;
+            }
+        }
+
+
     }
 }
