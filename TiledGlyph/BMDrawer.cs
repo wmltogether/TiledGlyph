@@ -109,7 +109,15 @@ namespace TiledGlyph
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
-                        currentXYWH.c_width = (uint)tile_width;
+                        if (char_code == 0x20)
+                        {
+                            currentXYWH.c_width = (uint)tile_width / 2 - 1;
+                        }
+                        else
+                        {
+                            currentXYWH.c_width = (uint)tile_width;
+                        }
+                        
                     }
                     else { 
                         float advance = (float)face.Glyph.Metrics.HorizontalAdvance;
