@@ -99,9 +99,9 @@ namespace TiledGlyph
                     currentXYWH.y_pos = (uint)y;
                     currentXYWH.page_num = (uint)i + 1;
                     string currentChar0 = currentString.ToCharArray()[n].ToString();
-
+                    uint char_code = uchar2code(currentChar0);
                     uint glyphIndex = face.GetCharIndex(uchar2code(currentChar0));
-                    currentXYWH.charid = glyphIndex; //set charid
+                    currentXYWH.charid = char_code; //set charid
                     face.LoadChar((uint)glyphIndex, LoadFlags.Default, LoadTarget.Normal);
                     face.LoadGlyph((uint)glyphIndex, LoadFlags.Default, LoadTarget.Normal);
                     face.Glyph.RenderGlyph(RenderMode.Normal);
