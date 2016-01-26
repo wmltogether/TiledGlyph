@@ -109,14 +109,9 @@ namespace TiledGlyph
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
-                        if (char_code == 0x20)
-                        {
-                            currentXYWH.c_width = (uint)tile_width / 2 - 1;
-                        }
-                        else
-                        {
-                            currentXYWH.c_width = (uint)tile_width;
-                        }
+
+                        currentXYWH.c_width = (uint)tile_width;
+
                         
                     }
                     else { 
@@ -133,6 +128,15 @@ namespace TiledGlyph
                         }
                     }
                     //currentXYWH.c_width = (uint)((float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width);//set c_width
+                    if (char_code == (uint)32)
+                    {
+                        currentXYWH.c_width = (uint)tile_width / 2 - 1;
+                    }
+                    else if (char_code >= (uint)8000)
+                    {
+                        currentXYWH.c_width = (uint)tile_width;
+
+                    }
                     currentXYWH.c_height = (uint)tile_height;
                     tmp.Add(currentXYWH);
                     x += this.tile_width;
