@@ -41,7 +41,8 @@ namespace TiledGlyph
         {
             freetype_normal = 0 ,
             freetype_nearestneighbor = 1,
-            freetype_drawtwice = 2
+            freetype_drawtwice = 2,
+            freetype_HighQualityBicubic = 2
         };
         string grender_mode = Enum.GetName(typeof(render_mode) , GlobalSettings.iGRenderMode);
         private Color penColor = GlobalSettings.cPenColor;
@@ -57,6 +58,8 @@ namespace TiledGlyph
             Library library = new Library();
             Face face = library.NewFace(fontName, 0);
             face.SetCharSize(0, this.fontHeight, 0, 72);
+            
+
             List<Table.XYWH> tmp = new List<Table.XYWH>();
             StringReader fReader = new StringReader(fTextStrings);
             int img_nums;
@@ -102,9 +105,9 @@ namespace TiledGlyph
                     uint char_code = uchar2code(currentChar0);
                     uint glyphIndex = face.GetCharIndex(uchar2code(currentChar0));
                     currentXYWH.charid = char_code; //set charid
-                    face.LoadChar((uint)glyphIndex, LoadFlags.Render, LoadTarget.Normal);
-                    face.LoadGlyph((uint)glyphIndex, LoadFlags.Render, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Mono);
+                    face.LoadChar((uint)glyphIndex, LoadFlags.Render, LoadTarget.Lcd);
+                    face.LoadGlyph((uint)glyphIndex, LoadFlags.Render, LoadTarget.Lcd);
+                    face.Glyph.RenderGlyph(RenderMode.Lcd);
 
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
@@ -132,6 +135,12 @@ namespace TiledGlyph
                     {
                         currentXYWH.c_width = (uint)tile_width / 2 - 1;
                     }
+                    else if ((char_code <= (uint)0x3000) && (char_code >= (uint)0x7e) )
+                    {
+                        currentXYWH.c_width = (uint)tile_width;
+
+                    }
+
                     else if (char_code >= (uint)8000)
                     {
                         currentXYWH.c_width = (uint)tile_width;
@@ -210,7 +219,7 @@ namespace TiledGlyph
                 return null;
             }
         }
-        public static Bitmap kResizeImage(Bitmap bmp, int newW, int newH)
+        public static Bitmap kResizeImage(Bitmap bmp, int newW, int newH, System.Drawing.Drawing2D.InterpolationMode currnetMode)
         {
             //插值缩放算法
             try
@@ -220,7 +229,7 @@ namespace TiledGlyph
 
                 // 插值算法的质量
                 //g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bilinear;
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.InterpolationMode = currnetMode;
 
                 g.DrawImage(bmp, new Rectangle(0, 0, newW, newH), new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
                 g.Dispose();
@@ -232,6 +241,29 @@ namespace TiledGlyph
                 return null;
             }
         }
+
+        public Bitmap gray2alpha(Bitmap cBmp)
+        {
+            Bitmap nBmp = new Bitmap((int)cBmp.Width , (int)cBmp.Height);
+            Color color;
+            Color colorResult;
+            for (int i = 0; i < cBmp.Width; i++)
+            {
+                for (int j = 0; j < cBmp.Height; j++)
+                {
+                    
+                    color = cBmp.GetPixel(i, j);
+                    int maxcolor = Math.Max(Math.Max(color.R, color.G), color.B);
+
+                    colorResult = Color.FromArgb(maxcolor, 255, 255, 255);
+                    nBmp.SetPixel(i, j , colorResult);
+
+                }
+            }
+
+            return nBmp;
+        }
+
         public Bitmap test_draw(string teststrings)
         {
             teststrings = teststrings.Replace("\n" , "");
@@ -249,14 +281,21 @@ namespace TiledGlyph
                 string currentChar0 = teststrings.ToCharArray()[i].ToString();          
                 uint glyphIndex = face.GetCharIndex(uchar2code(currentChar0));
                 
-                face.SetCharSize(0, this.fontHeight, 0, 72);
-                face.LoadGlyph(glyphIndex, LoadFlags.Render, LoadTarget.Normal);
-                face.Glyph.RenderGlyph(RenderMode.Mono);
+                
+
                 if (this.fontHeight < 14)
                 {
-                    face.LoadGlyph(glyphIndex, LoadFlags.Render, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Mono);
+                    face.SetPixelSizes((uint)0, (uint)this.fontHeight);
+                    face.LoadGlyph(glyphIndex, LoadFlags.NoBitmap, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Normal);
                 }
+                else
+                {
+                    face.SetCharSize(0, this.fontHeight, 0, 72);
+                    face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
+                    face.Glyph.RenderGlyph(RenderMode.Lcd);
+                }
+
                 //获取字符对齐
                 float left = (float)face.Glyph.Metrics.HorizontalBearingX;
                 float right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
@@ -272,8 +311,8 @@ namespace TiledGlyph
                 if (this.grender_mode == "freetype_nearestneighbor")
                 { 
                     face.SetCharSize(0, this.fontHeight *2, 0, 72);
-                    face.LoadGlyph(glyphIndex, LoadFlags.Render, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Mono);
+                    face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
+                    face.Glyph.RenderGlyph(RenderMode.Lcd);
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
@@ -291,8 +330,42 @@ namespace TiledGlyph
                     tmpBmp = kPasteImage(tmpBmp, tile_width * 2, tile_height * 2, (int)face.Glyph.BitmapLeft ,
                         (int)Math.Round(((float)this.fontHeight * 2 - face.Glyph.BitmapTop)));
 
-                    Bitmap cBmp = kResizeImage(tmpBmp, tmpBmp.Width / 2 , tmpBmp.Height/2);
-                    g.DrawImageUnscaled(cBmp, x + GlobalSettings.relativePositionX, y + GlobalSettings.relativePositionY);
+                    Bitmap cBmp = kResizeImage(tmpBmp, tmpBmp.Width / 2, tmpBmp.Height / 2, System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor);
+                    Bitmap nBmp = gray2alpha(cBmp);
+                    cBmp.Dispose();
+
+                    g.DrawImageUnscaled(nBmp, x + GlobalSettings.relativePositionX, y + GlobalSettings.relativePositionY);
+                    nBmp.Dispose();
+                }
+                else if (this.grender_mode == "freetype_HighQualityBicubic")
+                {
+                    face.SetCharSize(0, this.fontHeight * 2, 0, 72);
+                    face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
+                    face.Glyph.RenderGlyph(RenderMode.Lcd);
+                    FTBitmap ftbmp = face.Glyph.Bitmap;
+                    if (ftbmp.Width == 0)
+                    {
+                        x += this.tile_width;
+                        if (x + this.tile_width > this.image_width)
+                        {
+                            x = 0;
+                            y += this.tile_height;
+                        }
+                        continue;
+                    }
+
+                    Bitmap tmpBmp = ftbmp.ToGdipBitmap(this.penColor);
+
+                    tmpBmp = kPasteImage(tmpBmp, tile_width * 2, tile_height * 2, (int)face.Glyph.BitmapLeft,
+                        (int)Math.Round(((float)this.fontHeight * 2 - face.Glyph.BitmapTop)));
+
+                    Bitmap cBmp = kResizeImage(tmpBmp, tmpBmp.Width / 2, tmpBmp.Height / 2, System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic);
+                    Bitmap nBmp = gray2alpha(cBmp);
+                    cBmp.Dispose();
+
+                    g.DrawImageUnscaled(nBmp, x + GlobalSettings.relativePositionX, y + GlobalSettings.relativePositionY);
+                    nBmp.Dispose();
+
                 }
                 else if (this.grender_mode == "freetype_drawtwice")
                 {
@@ -308,12 +381,16 @@ namespace TiledGlyph
                         continue;
                     }
                     Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
-
-                    g.DrawImageUnscaled(cBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
-                    g.DrawImageUnscaled(cBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);//draw twice
+                    Bitmap nBmp = gray2alpha(cBmp);
                     cBmp.Dispose();
+                    g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                    g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);//draw twice
+                    cBmp.Dispose();
+                    nBmp.Dispose();
 
                 }
+
+
                 else
                 {
                     FTBitmap ftbmp = face.Glyph.Bitmap;
@@ -328,25 +405,12 @@ namespace TiledGlyph
                         continue;
                     }
                     Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
-                    g.DrawImageUnscaled(cBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                    Bitmap nBmp = gray2alpha(cBmp);
                     cBmp.Dispose();
+                    g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                    nBmp.Dispose();
+                    
                 }
-                    /*
-                    Stroker stroker = new Stroker(library);
-                    stroker.Set(1, StrokerLineCap.Round, StrokerLineJoin.Round, 0);
-                    face.LoadGlyph(glyphIndex, LoadFlags.NoBitmap, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Mono);
-                    Glyph glyph = face.Glyph.GetGlyph();
-                    if (face.Glyph.Format != GlyphFormat.Outline)
-                        throw new InvalidCastException("The glyph's format is not GlyphFormat.Outline.");
-                    Glyph new_glyph = glyph.StrokeBorder(stroker,false,true);
-                    BitmapGlyph bg = new_glyph.ToBitmapGlyph();
-                    FTBitmap ft2 = bg.Bitmap;
-                    Bitmap ft2Bmp = ft2.ToGdipBitmap(Color.Black);
-                    g.DrawImageUnscaled(ft2Bmp, kx, ky);
-                    g.DrawImageUnscaled(cBmp, kx, ky);
-                     */
-
 
 
                 x += this.tile_width;

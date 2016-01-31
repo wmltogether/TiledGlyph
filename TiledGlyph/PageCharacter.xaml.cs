@@ -190,7 +190,7 @@ namespace TiledGlyph
                                             g = pixel.G;
                                             b = pixel.B;
                                             a = pixel.A;
-                                            Result = ((int)(0.7 * r) + (int)(0.2 * g) + (int)(0.1 * b));
+                                            Result = Math.Max(Math.Max(r * a / 255, g * a / 255), b * a / 255);
                                             dest.SetPixel(x, y, System.Drawing.Color.FromArgb(Result,255,255,255));
 
                                         }
