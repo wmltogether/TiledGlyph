@@ -255,6 +255,10 @@ namespace TiledGlyph
                     
                     color = cBmp.GetPixel(i, j);
                     int maxcolor = Math.Max(Math.Max(color.R, color.G), color.B);
+                    if (!(color.A == 255)){
+
+                        maxcolor = color.A;
+                    } 
 
                     colorResult = Color.FromArgb(maxcolor, 255, 255, 255);
                     nBmp.SetPixel(i, j , colorResult);
@@ -284,9 +288,18 @@ namespace TiledGlyph
                 
                 
 
-                face.SetCharSize(0, this.fontHeight, 0, 72);
-                face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
-                face.Glyph.RenderGlyph(RenderMode.Lcd);
+                if (this.fontHeight <= 14)
+                {
+                    face.SetPixelSizes((uint)0, (uint)this.fontHeight);
+                    face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Normal);
+                }
+                else
+                {
+                    face.SetCharSize(0, this.fontHeight, 0, 72);
+                    face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
+                    face.Glyph.RenderGlyph(RenderMode.Lcd);
+                }
 
                 //获取字符对齐
                 float left = (float)face.Glyph.Metrics.HorizontalBearingX;

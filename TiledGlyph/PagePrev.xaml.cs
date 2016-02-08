@@ -113,7 +113,7 @@ namespace TiledGlyph
                                 //
                                 // ... draw on the drawingContext
                                 //
-                                System.Windows.Media.Pen pen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.Red, (double)0.5f);
+                                System.Windows.Media.Pen pen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.Red, (double)0.3f);
                                 drawingContext.DrawImage(image.Source, new Rect(0, 0, image.Source.Width, image.Source.Height));
                                 int x_lines = (int)Math.Round((float)(int)image.Width / (float)GlobalSettings.iTileWidth);
 
