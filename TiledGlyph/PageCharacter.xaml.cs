@@ -148,9 +148,34 @@ namespace TiledGlyph
                         string teststrings = characterTextBox.Text;
                         if (teststrings.Length > 0)
                         {
-                            Bitmap dest = bmd.test_draw(teststrings);
+                            Bitmap tmpBmp = bmd.test_draw(teststrings);
+                            Bitmap dest = new Bitmap(tmpBmp.Width, tmpBmp.Height);
+                            if (GlobalSettings.bOptmizeAlpha == true)
+                            {
+                                System.Drawing.Color pixel;
+                                for (int x = 0; x < tmpBmp.Width; x++)
+                                    for (int y = 0; y < tmpBmp.Height; y++)
+                                    {
+                                        pixel = tmpBmp.GetPixel(x, y);
+                                        int r, g, b, a, Result = 0;
+                                        r = pixel.R;
+                                        g = pixel.G;
+                                        b = pixel.B;
+                                        a = pixel.A;
+                                        Result = Math.Max(Math.Max(r * a / 255, g * a / 255), b * a / 255);
+                                        dest.SetPixel(x, y, System.Drawing.Color.FromArgb(Result, 255, 255, 255));
+
+                                    }
+                            }
+                            else
+                            {
+                                dest = tmpBmp;
+                            }
+
                             dest.Save(string.Format("{0}\\font.{1}", saveFolderName, fmt.ToString()), fmt);
                             dest.Dispose();
+                            tmpBmp.Dispose();
+
                         }
                     })
                );

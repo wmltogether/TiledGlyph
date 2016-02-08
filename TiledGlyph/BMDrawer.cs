@@ -333,7 +333,7 @@ namespace TiledGlyph
                     Bitmap tmpBmp = ftbmp.ToGdipBitmap(this.penColor);
 
                     tmpBmp = kPasteImage(tmpBmp, tile_width * 2, tile_height * 2, (int)face.Glyph.BitmapLeft ,
-                        (int)Math.Round(((float)this.fontHeight * 2 - face.Glyph.BitmapTop)));
+                                        (int)Math.Round(((float)this.fontHeight * 2 - face.Glyph.BitmapTop)));
 
                     Bitmap cBmp = kResizeImage(tmpBmp, tmpBmp.Width / 2, tmpBmp.Height / 2, System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor);
                     Bitmap nBmp = gray2alpha(cBmp);
