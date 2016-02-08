@@ -24,6 +24,7 @@
             <ComboBoxItem Content="NearestNeighbor" HorizontalAlignment="Left" Width="147"/>
             <ComboBoxItem Content="Thicker(Draw Twice)" HorizontalAlignment="Left" Width="147"/>
             <ComboBoxItem Content="HighQualityBicubic" HorizontalAlignment="Left" Width="147"/>
+            <ComboBoxItem Content="No Smoothing" HorizontalAlignment="Left" Width="147"/>
         </ComboBox>
         <Label Content="Rendering Mode" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"/>
         <Label Content="Pen Brush Color" HorizontalAlignment="Left" Margin="10,184,0,0" VerticalAlignment="Top"/>

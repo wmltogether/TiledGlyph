@@ -42,7 +42,8 @@ namespace TiledGlyph
             freetype_normal = 0 ,
             freetype_nearestneighbor = 1,
             freetype_drawtwice = 2,
-            freetype_HighQualityBicubic = 2
+            freetype_HighQualityBicubic = 3,
+            freeyype_nosmoothing = 4
         };
         string grender_mode = Enum.GetName(typeof(render_mode) , GlobalSettings.iGRenderMode);
         private Color penColor = GlobalSettings.cPenColor;
@@ -283,18 +284,9 @@ namespace TiledGlyph
                 
                 
 
-                if (this.fontHeight < 14)
-                {
-                    face.SetPixelSizes((uint)0, (uint)this.fontHeight);
-                    face.LoadGlyph(glyphIndex, LoadFlags.NoBitmap, LoadTarget.Normal);
-                    face.Glyph.RenderGlyph(RenderMode.Normal);
-                }
-                else
-                {
-                    face.SetCharSize(0, this.fontHeight, 0, 72);
-                    face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
-                    face.Glyph.RenderGlyph(RenderMode.Lcd);
-                }
+                face.SetCharSize(0, this.fontHeight, 0, 72);
+                face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
+                face.Glyph.RenderGlyph(RenderMode.Lcd);
 
                 //获取字符对齐
                 float left = (float)face.Glyph.Metrics.HorizontalBearingX;
@@ -388,6 +380,26 @@ namespace TiledGlyph
                     cBmp.Dispose();
                     nBmp.Dispose();
 
+                }
+                else if (this.grender_mode == "freeyype_nosmoothing")
+                {
+                    face.SetPixelSizes((uint)0, (uint)this.fontHeight);
+                    face.LoadGlyph(glyphIndex, LoadFlags.Monochrome, LoadTarget.Mono);
+                    face.Glyph.RenderGlyph(RenderMode.Mono);
+                    FTBitmap ftbmp = face.Glyph.Bitmap;
+                    if (ftbmp.Width == 0)
+                    {
+                        x += this.tile_width;
+                        if (x + this.tile_width > this.image_width)
+                        {
+                            x = 0;
+                            y += this.tile_height;
+                        }
+                        continue;
+                    }
+                    Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
+                    g.DrawImageUnscaled(cBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                    cBmp.Dispose();
                 }
 
 
