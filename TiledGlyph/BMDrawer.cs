@@ -48,6 +48,7 @@ namespace TiledGlyph
         string grender_mode = Enum.GetName(typeof(render_mode) , GlobalSettings.iGRenderMode);
         private Color penColor = GlobalSettings.cPenColor;
 
+        private Color shadowColor = GlobalSettings.cShadowColor;
 
         uint uchar2code(string current_char)
         {
@@ -374,6 +375,8 @@ namespace TiledGlyph
                 }
                 else if (this.grender_mode == "freetype_drawtwice")
                 {
+                    face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Normal);
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
@@ -386,10 +389,13 @@ namespace TiledGlyph
                         continue;
                     }
                     Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
+                    Bitmap sBmp = ftbmp.ToGdipBitmap(this.shadowColor);
+
                     Bitmap nBmp = gray2alpha(cBmp);
                     cBmp.Dispose();
+                    
+                    g.DrawImageUnscaled(sBmp, kx + GlobalSettings.relativePositionX + 1, ky + GlobalSettings.relativePositionY + 1);//draw twice
                     g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
-                    g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);//draw twice
                     cBmp.Dispose();
                     nBmp.Dispose();
 

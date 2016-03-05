@@ -18,6 +18,7 @@ namespace TiledGlyph
         public static int iImageCount = 1;
         public static Color cBgColor = Color.Transparent;
         public static Color cPenColor = Color.White;
+        public static Color cShadowColor = Color.Gray;
         public static string fTextStrings = "";
         public static string fFontName = "Font/NotoSansCJKsc-Regular.otf";
         public static bool bUseUnlimitHeight = false;
