@@ -22,24 +22,24 @@
         <ComboBox x:Name="comboboxRenderMode" HorizontalAlignment="Left" Margin="171,104,0,0" VerticalAlignment="Top" Width="147" SelectionChanged="comboboxRenderMode_SelectionChanged">
             <ComboBoxItem Content="Normal" HorizontalAlignment="Left" Width="147" IsSelected="True"/>
             <ComboBoxItem Content="NearestNeighbor" HorizontalAlignment="Left" Width="147"/>
-            <ComboBoxItem Content="Thicker(Draw Twice)" HorizontalAlignment="Left" Width="147"/>
+            <ComboBoxItem Content="Draw Outline" HorizontalAlignment="Left" Width="147"/>
             <ComboBoxItem Content="HighQualityBicubic" HorizontalAlignment="Left" Width="147"/>
             <ComboBoxItem Content="No Smoothing" HorizontalAlignment="Left" Width="147"/>
         </ComboBox>
         <Label Content="Rendering Mode" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"/>
-        <Label Content="Pen Brush Color" HorizontalAlignment="Left" Margin="10,184,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textboxPenBrushColor" HorizontalAlignment="Left" Height="23" Margin="320,181,0,0" TextWrapping="Wrap" Text="#FFFFFF" VerticalAlignment="Top" Width="79" MaxLength="10" MaxLines="1"/>
-        <Label Content="Background Color" HorizontalAlignment="Left" Margin="10,219,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textboxBgBrushColor" HorizontalAlignment="Left" Height="23" Margin="320,219,0,0" TextWrapping="Wrap" Text="#000000" VerticalAlignment="Top" Width="79" MaxLength="10" MaxLines="1"/>
-        <Label Content="TTF Font Name" HorizontalAlignment="Left" Margin="10,265,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textbox_FontName" HorizontalAlignment="Left" Height="23" Margin="171,262,0,0" TextWrapping="Wrap" Text="/Font/NotoSansCJKsc-Regular.otf" VerticalAlignment="Top" Width="147"/>
-        <mui:ModernButton x:Name="buttonChooseFont" Content="Select TTF Font " HorizontalAlignment="Left" Margin="338,261,0,0" VerticalAlignment="Top" Click="buttonChooseFont_Click"/>
-        <Label Content="Image Format" HorizontalAlignment="Left" Margin="10,307,0,0" VerticalAlignment="Top"/>
-        <mui:ModernButton x:Name="buttonRefresh" Content="Force Refresh" HorizontalAlignment="Left" Margin="338,101,0,0" VerticalAlignment="Top" Click="buttonRefresh_Click"/>
+        <Label Content="Pen Brush Color" HorizontalAlignment="Left" Margin="10,193,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textboxPenBrushColor" HorizontalAlignment="Left" Height="23" Margin="320,190,0,0" TextWrapping="Wrap" Text="#FFFFFF" VerticalAlignment="Top" Width="79" MaxLength="10" MaxLines="1"/>
+        <Label Content="Background Color" HorizontalAlignment="Left" Margin="10,230,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textboxBgBrushColor" HorizontalAlignment="Left" Height="23" Margin="320,230,0,0" TextWrapping="Wrap" Text="#000000" VerticalAlignment="Top" Width="79" MaxLength="10" MaxLines="1"/>
+        <Label Content="TTF Font Name" HorizontalAlignment="Left" Margin="10,337,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textbox_FontName" HorizontalAlignment="Left" Height="23" Margin="171,334,0,0" TextWrapping="Wrap" Text="/Font/NotoSansCJKsc-Regular.otf" VerticalAlignment="Top" Width="147"/>
+        <mui:ModernButton x:Name="buttonChooseFont" Content="Select TTF Font " HorizontalAlignment="Left" Margin="338,333,0,0" VerticalAlignment="Top" Click="buttonChooseFont_Click"/>
+        <Label Content="Image Format" HorizontalAlignment="Left" Margin="10,379,0,0" VerticalAlignment="Top"/>
+        <mui:ModernButton x:Name="buttonRefresh" Content="Force Refresh" HorizontalAlignment="Left" Margin="549,221,0,0" VerticalAlignment="Top" Click="buttonRefresh_Click"/>
         <TextBox x:Name="textboxFontHeight" LostFocus="textboxFontHeight_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="415,58,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
         <Label Content="Font Size:" HorizontalAlignment="Left" Margin="338,61,0,0" VerticalAlignment="Top"/>
 
-        <xctk:ColorPicker x:Name="penColorPicker" SelectedColorChanged="penColorPicker_SelectedColorChanged"  HorizontalAlignment="Left" Margin="171,181,0,0" VerticalAlignment="Top" Width="108" BorderBrush="Black" Height="23" ColorMode="ColorPalette" Foreground="#FF686868">
+        <xctk:ColorPicker x:Name="penColorPicker" SelectedColorChanged="penColorPicker_SelectedColorChanged"  HorizontalAlignment="Left" Margin="171,190,0,0" VerticalAlignment="Top" Width="108" BorderBrush="Black" Height="23" ColorMode="ColorPalette" Foreground="#FF686868">
             <xctk:ColorPicker.ButtonStyle>
                 <Style TargetType="{x:Type ToggleButton}">
                     <Setter Property="Template">
@@ -82,7 +82,7 @@
                 <SolidColorBrush Color="#FF383838"/>
             </xctk:ColorPicker.Background>
         </xctk:ColorPicker>
-        <xctk:ColorPicker x:Name="bgColorPicker" SelectedColorChanged="bgColorPicker_SelectedColorChanged" HorizontalAlignment="Left" Margin="171,219,0,0" VerticalAlignment="Top" Width="108" BorderBrush="Black" Height="23" ColorMode="ColorPalette" Foreground="#FF686868" Background="#FF383838" SelectedColor="#00000000">
+        <xctk:ColorPicker x:Name="bgColorPicker" SelectedColorChanged="bgColorPicker_SelectedColorChanged" HorizontalAlignment="Left" Margin="171,230,0,0" VerticalAlignment="Top" Width="108" BorderBrush="Black" Height="23" ColorMode="ColorPalette" Foreground="#FF686868" Background="#FF383838" SelectedColor="#00000000">
             <xctk:ColorPicker.ButtonStyle>
                 <Style TargetType="{x:Type ToggleButton}">
                     <Setter Property="Template">
@@ -122,14 +122,59 @@
                 </Style>
             </xctk:ColorPicker.ButtonStyle>
         </xctk:ColorPicker>
-        <ComboBox x:Name="comboboxSaveImageType" HorizontalAlignment="Left" Margin="171,304,0,0" VerticalAlignment="Top" Width="147" SelectionChanged="comboboxSaveImageType_SelectionChanged">
+        <ComboBox x:Name="comboboxSaveImageType" HorizontalAlignment="Left" Margin="171,376,0,0" VerticalAlignment="Top" Width="147" SelectionChanged="comboboxSaveImageType_SelectionChanged">
             <ComboBoxItem Content="PNG" HorizontalAlignment="Left" Width="147" IsSelected="True"/>
             <ComboBoxItem Content="BMP" HorizontalAlignment="Left" Width="147"/>
         </ComboBox>
         <Label Content="Relative position :" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textboxRPositionX" LostFocus="textboxRPositionX_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="171,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
         <TextBox x:Name="textboxRpositionY" LostFocus="textboxRpositionY_LostFocus"  HorizontalAlignment="Left" Height="23" Margin="252,140,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="66" MaxLength="4" MaxLines="1"/>
-        <CheckBox x:Name="checkboxOptmizeAlpha" Content="Optmize Alpha" HorizontalAlignment="Left" Margin="338,308,0,0" VerticalAlignment="Top" Checked="checkboxOptmizeAlpha_Checked" Unchecked="checkboxOptmizeAlpha_Unchecked"/>
+        <CheckBox x:Name="checkboxOptmizeAlpha" Content="Optmize Alpha" HorizontalAlignment="Left" Margin="338,380,0,0" VerticalAlignment="Top" Checked="checkboxOptmizeAlpha_Checked" Unchecked="checkboxOptmizeAlpha_Unchecked"/>
+        <Label Content="Outline Color " HorizontalAlignment="Left" Margin="10,277,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textboxOutlineBrushColor" HorizontalAlignment="Left" Height="23" Margin="320,277,0,0" TextWrapping="Wrap" Text="#202020" VerticalAlignment="Top" Width="79" MaxLength="10" MaxLines="1"/>
+        <xctk:ColorPicker x:Name="outlineColorPicker" SelectedColorChanged="outlineColorPicker_SelectedColorChanged" HorizontalAlignment="Left" Margin="171,277,0,0" VerticalAlignment="Top" Width="108" BorderBrush="Black" Height="23" ColorMode="ColorPalette" Foreground="#FF686868" Background="#FF383838" SelectedColor="#FF3C3C3C">
+            <xctk:ColorPicker.ButtonStyle>
+                <Style TargetType="{x:Type ToggleButton}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                <Grid SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <xctk:ButtonChrome x:Name="ToggleButtonChrome" Grid.Column="1" CornerRadius="0,0,0,0" InnerCornerRadius="0,0,0,0" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" RenderChecked="{Binding IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type xctk:ColorPicker}}}" RenderEnabled="{Binding IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type xctk:ColorPicker}}}" Background="#FF333333" BorderBrush="{x:Null}" BorderThickness="0">
+                                            <xctk:ButtonChrome.Visibility>
+                                                <Binding Path="ShowDropDownButton" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type xctk:ColorPicker}}">
+                                                    <Binding.Converter>
+                                                        <BooleanToVisibilityConverter/>
+                                                    </Binding.Converter>
+                                                </Binding>
+                                            </xctk:ButtonChrome.Visibility>
+                                            <Grid x:Name="arrowGlyph" Grid.Column="1" IsHitTestVisible="False" Margin="5">
+                                                <Path x:Name="Arrow" Data="M 0 0 L 4 4 L 8 0 Z" Fill="White" Height="4" Width="7"/>
+                                            </Grid>
+                                        </xctk:ButtonChrome>
+                                    </Grid>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Fill" TargetName="Arrow" Value="#FFAFAFAF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </xctk:ColorPicker.ButtonStyle>
+        </xctk:ColorPicker>
+        <TextBox x:Name="textboxFontBold" LostFocus="textboxFontBold_LostFocus"   HorizontalAlignment="Left" Height="23" Margin="415,104,0,0" TextWrapping="Wrap" Text="0.4" VerticalAlignment="Top" Width="66" SelectionOpacity="2"/>
+        <Label Content="Font Bold:" HorizontalAlignment="Left" Margin="338,107,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="checkboxUseOutlineEffect" Content="Use Outline Effect" HorizontalAlignment="Left" Margin="338,142,0,0" VerticalAlignment="Top" Checked="checkboxUseOutlineEffect_Checked" Unchecked="checkboxUseOutlineEffect_Unchecked"/>
 
     </Grid>
 </UserControl>

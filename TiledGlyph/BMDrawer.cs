@@ -43,7 +43,7 @@ namespace TiledGlyph
             freetype_nearestneighbor = 1,
             freetype_drawtwice = 2,
             freetype_HighQualityBicubic = 3,
-            freeyype_nosmoothing = 4
+            freetype_nosmoothing = 4
         };
         string grender_mode = Enum.GetName(typeof(render_mode) , GlobalSettings.iGRenderMode);
         private Color penColor = GlobalSettings.cPenColor;
@@ -166,7 +166,8 @@ namespace TiledGlyph
         {
             StringReader fReader = new StringReader(fTextStrings);
             int img_nums;
-            int chars_per_page = (image_width / tile_width) * (image_height / tile_height);
+            int chars_per_page = 1;
+            chars_per_page = (image_width / tile_width) * (image_height / tile_height);
             if (fTextStrings.Length < (chars_per_page))
             {
                 img_nums = 1;
@@ -272,10 +273,11 @@ namespace TiledGlyph
 
         public Bitmap test_draw(string teststrings)
         {
-            teststrings = teststrings.Replace("\n" , "");
-            teststrings = teststrings.Replace("\r", "");
+            //teststrings = teststrings.Replace("\n" , "");
+            //teststrings = teststrings.Replace("\r", "");
             Library library = new Library();
             Face face = library.NewFace(fontName, 0);
+            
             
             Bitmap bmp = new Bitmap((int)Math.Ceiling((double)image_width), (int)Math.Ceiling((double)image_height));
             Graphics g = Graphics.FromImage(bmp);
@@ -303,22 +305,38 @@ namespace TiledGlyph
                 }
 
                 //获取字符对齐
-                float left = (float)face.Glyph.Metrics.HorizontalBearingX;
-                float right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
-                float top = (float)face.Glyph.Metrics.HorizontalBearingY;
-                float bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
-                float FHT = this.fontHeight;
-                int FHD = (int)Math.Ceiling(FHT);
-                int kx = x + face.Glyph.BitmapLeft;
-                int ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+                float left, right, top, bottom, FHT;
+                int FHD, kx, ky;
 
-                
+                left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                FHT = this.fontHeight;
+                FHD = (int)Math.Ceiling(FHT);
+                kx = x + face.Glyph.BitmapLeft;
+                ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
                 //选择渲染模式（1倍 or 2倍）
                 if (this.grender_mode == "freetype_nearestneighbor")
                 { 
+
+
                     face.SetCharSize(0, this.fontHeight *2, 0, 72);
                     face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
                     face.Glyph.RenderGlyph(RenderMode.Lcd);
+                    left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                    right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                    top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                    bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                    FHT = this.fontHeight;
+                    FHD = (int)Math.Ceiling(FHT);
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
@@ -346,8 +364,20 @@ namespace TiledGlyph
                 else if (this.grender_mode == "freetype_HighQualityBicubic")
                 {
                     face.SetCharSize(0, this.fontHeight * 2, 0, 72);
-                    face.LoadGlyph(glyphIndex, LoadFlags.ForceAutohint, LoadTarget.Lcd);
-                    face.Glyph.RenderGlyph(RenderMode.Lcd);
+                    face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                    face.Glyph.RenderGlyph(RenderMode.Normal);
+                    left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                    right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                    top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                    bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                    FHT = this.fontHeight;
+                    FHD = (int)Math.Ceiling(FHT);
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
@@ -359,7 +389,7 @@ namespace TiledGlyph
                         }
                         continue;
                     }
-
+                    
                     Bitmap tmpBmp = ftbmp.ToGdipBitmap(this.penColor);
 
                     tmpBmp = kPasteImage(tmpBmp, tile_width * 2, tile_height * 2, (int)face.Glyph.BitmapLeft,
@@ -377,6 +407,18 @@ namespace TiledGlyph
                 {
                     face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
                     face.Glyph.RenderGlyph(RenderMode.Normal);
+                    left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                    right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                    top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                    bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                    FHT = this.fontHeight;
+                    FHD = (int)Math.Ceiling(FHT);
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
@@ -388,23 +430,84 @@ namespace TiledGlyph
                         }
                         continue;
                     }
-                    Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
-                    Bitmap sBmp = ftbmp.ToGdipBitmap(this.shadowColor);
-
-                    Bitmap nBmp = gray2alpha(cBmp);
-                    cBmp.Dispose();
                     
-                    g.DrawImageUnscaled(sBmp, kx + GlobalSettings.relativePositionX + 1, ky + GlobalSettings.relativePositionY + 1);//draw twice
-                    g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
-                    cBmp.Dispose();
-                    nBmp.Dispose();
+                    //这是一个临时描边的功能，还没有添加到UI
+                    if (GlobalSettings.bUseOutlineEffect == true)
+                    {
+                        Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
+                        face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                        face.Glyph.Outline.Embolden(2);
+                        face.Glyph.RenderGlyph(RenderMode.Normal);
+
+                        left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                        right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                        top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                        bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                        FHT = this.fontHeight;
+                        FHD = (int)Math.Ceiling(FHT);
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
+                        FTBitmap ftbmp1 = face.Glyph.Bitmap;
+                        Bitmap sBmp = ftbmp1.ToGdipBitmap(GlobalSettings.cShadowColor);
+                        Bitmap nBmp = gray2alpha(cBmp);
+                        //Bitmap s2Bmp = gray2alpha(sBmp);
+
+                        g.DrawImageUnscaled(sBmp, kx + GlobalSettings.relativePositionX - 1, ky + GlobalSettings.relativePositionY - 1);//draw twice
+                        g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                        cBmp.Dispose();
+                        nBmp.Dispose();
+                        sBmp.Dispose();
+                    }
+                    else
+                    {
+                        Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
+                        face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                        face.Glyph.RenderGlyph(RenderMode.Normal);
+                        left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                        right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                        top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                        bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                        FHT = this.fontHeight;
+                        FHD = (int)Math.Ceiling(FHT);
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
+                        FTBitmap ftbmp1 = face.Glyph.Bitmap;
+                        Bitmap sBmp = ftbmp1.ToGdipBitmap(this.penColor);
+                        Bitmap nBmp = gray2alpha(cBmp);
+                        sBmp = gray2alpha(sBmp);
+                        g.DrawImageUnscaled(sBmp, kx + GlobalSettings.relativePositionX - 1, ky + GlobalSettings.relativePositionY - 1);//draw twice
+                        g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                        cBmp.Dispose();
+                        nBmp.Dispose();
+                        sBmp.Dispose();
+
+                    }
+
 
                 }
-                else if (this.grender_mode == "freeyype_nosmoothing")
+                else if (this.grender_mode == "freetype_nosmoothing")
                 {
                     face.SetPixelSizes((uint)0, (uint)this.fontHeight);
                     face.LoadGlyph(glyphIndex, LoadFlags.Monochrome, LoadTarget.Mono);
                     face.Glyph.RenderGlyph(RenderMode.Mono);
+                    left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                    right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                    top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                    bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                    FHT = this.fontHeight;
+                    FHD = (int)Math.Ceiling(FHT);
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+                    kx = x + face.Glyph.BitmapLeft;
+                    ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
                     FTBitmap ftbmp = face.Glyph.Bitmap;
                     if (ftbmp.Width == 0)
                     {
@@ -424,7 +527,33 @@ namespace TiledGlyph
 
                 else
                 {
+
+                    face.SetCharSize(0, this.fontHeight, 0, 72);
+                    if (GlobalSettings.iFontBold > (float)0)
+                    {
+                        //临时加粗face.Glyph.Outline.Embolden(0.4);值要小于1，不然很丑
+                        face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                        face.Glyph.Outline.Embolden(0.4);
+                        face.Glyph.RenderGlyph(RenderMode.Normal);
+                        left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                        right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                        top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                        bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                        FHT = this.fontHeight;
+                        FHD = (int)Math.Ceiling(FHT);
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
+                    }
+                    
+                    
+                    
                     FTBitmap ftbmp = face.Glyph.Bitmap;
+
+                    
                     if (ftbmp.Width == 0)
                     {
                         x += this.tile_width;
@@ -435,11 +564,44 @@ namespace TiledGlyph
                         }
                         continue;
                     }
-                    Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
-                    Bitmap nBmp = gray2alpha(cBmp);
-                    cBmp.Dispose();
-                    g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
-                    nBmp.Dispose();
+                    if (GlobalSettings.bUseOutlineEffect == true)
+                    {
+                        Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
+                        face.LoadGlyph(glyphIndex, LoadFlags.Default, LoadTarget.Normal);
+                        face.Glyph.Outline.Embolden(2);
+                        face.Glyph.RenderGlyph(RenderMode.Normal);
+                        left = (float)face.Glyph.Metrics.HorizontalBearingX;
+                        right = (float)face.Glyph.Metrics.HorizontalBearingX + (float)face.Glyph.Metrics.Width;
+                        top = (float)face.Glyph.Metrics.HorizontalBearingY;
+                        bottom = (float)face.Glyph.Metrics.HorizontalBearingY + (float)face.Glyph.Metrics.Height;
+                        FHT = this.fontHeight;
+                        FHD = (int)Math.Ceiling(FHT);
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - face.Glyph.BitmapTop));
+
+
+                        kx = x + face.Glyph.BitmapLeft;
+                        ky = (int)Math.Round((float)y + (FHD - (float)face.Glyph.Metrics.HorizontalBearingY));
+                        FTBitmap ftbmp1 = face.Glyph.Bitmap;
+                        Bitmap sBmp = ftbmp1.ToGdipBitmap(GlobalSettings.cShadowColor);
+                        Bitmap nBmp = gray2alpha(cBmp);
+                        //Bitmap s2Bmp = gray2alpha(sBmp);
+                        g.DrawImageUnscaled(sBmp, kx + GlobalSettings.relativePositionX - 1, ky + GlobalSettings.relativePositionY - 1);//draw twice
+                        g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                        cBmp.Dispose();
+                        nBmp.Dispose();
+                        sBmp.Dispose();
+                    }
+                    else
+                    {
+
+                        Bitmap cBmp = ftbmp.ToGdipBitmap(this.penColor);
+                        Bitmap nBmp = gray2alpha(cBmp);
+                        cBmp.Dispose();
+                        g.DrawImageUnscaled(nBmp, kx + GlobalSettings.relativePositionX, ky + GlobalSettings.relativePositionY);
+                        nBmp.Dispose();
+                    }
+                    
                     
                 }
 

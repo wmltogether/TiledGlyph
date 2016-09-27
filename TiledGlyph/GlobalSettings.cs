@@ -28,5 +28,8 @@ namespace TiledGlyph
 
         public static int relativePositionX = 0;
         public static int relativePositionY = 0;
+        public static float iFontBold = (float)0;
+        public static int iFontOutline = 2;
+        public static bool bUseOutlineEffect = false;
     }
 }

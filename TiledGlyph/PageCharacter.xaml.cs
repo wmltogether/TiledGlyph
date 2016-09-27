@@ -26,6 +26,11 @@ namespace TiledGlyph
     /// <summary>
     /// PageCharacter.xaml 的交互逻辑
     /// </summary>
+    /// 
+    public static class tmps 
+    {
+        public static string tmpstr;
+    };
     public partial class PageCharacter : UserControl
     {
         public PageCharacter()
@@ -44,6 +49,7 @@ namespace TiledGlyph
         private void buttonLoadFromFile_Click(object sender, RoutedEventArgs e)
         {
             string fName;
+            
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = "";
             openFileDialog.Filter = "Text File|*.txt";
@@ -54,6 +60,7 @@ namespace TiledGlyph
                 fName = openFileDialog.FileName;
 
                 characterTextBox.Text = readStringFromFile(fName);
+                tmps.tmpstr = readStringFromFile(fName);
                 stringinfotextblock.Text = String.Format("{0} Characters Loaded.", characterTextBox.Text.Length);
             }
 
@@ -145,7 +152,7 @@ namespace TiledGlyph
                     {
                         //新开一个线程池执行draw
                         BMDrawer bmd = new BMDrawer();
-                        string teststrings = characterTextBox.Text;
+                        string teststrings = tmps.tmpstr;
                         if (teststrings.Length > 0)
                         {
                             Bitmap tmpBmp = bmd.test_draw(teststrings);
@@ -193,7 +200,7 @@ namespace TiledGlyph
                     {
                         //新开一个线程池执行draw
                         BMDrawer bmd = new BMDrawer();
-                        string teststrings = characterTextBox.Text;
+                        string teststrings = tmps.tmpstr;
 
                         Bitmap[] bmp = bmd.DrawMultiImages(teststrings);
 
@@ -222,10 +229,13 @@ namespace TiledGlyph
                                 }
                                 else
                                 {
-                                    dest = tmpBmp;
+                                    Graphics draw = null;
+                                    draw = Graphics.FromImage(dest);
+                                    draw.DrawImage(tmpBmp, 0, 0);
                                 }
-                                
-                                dest.Save(string.Format("{0}\\font.{1}.{2}", saveFolderName, i, fmt.ToString()), fmt);
+                                string fot_name = System.IO.Path.GetFileName(GlobalSettings.fFontName);
+                                string name = string.Format("{0}\\{1}_{2}.{3}", saveFolderName, fot_name, i, fmt.ToString());
+                                dest.Save(name, fmt);
                                 dest.Dispose();
                                 tmpBmp.Dispose();
                             }
@@ -247,7 +257,7 @@ namespace TiledGlyph
             }
             SaveFileDialog savefiledialog = new SaveFileDialog();
             savefiledialog.RestoreDirectory = true;
-            savefiledialog.Filter = "Font Binary（*.bin）|*.bin|Excel csv File(*.csv)|*.csv";
+            savefiledialog.Filter = "Font Binary（*.bin）|*.bin|Excel csv File(*.csv)|*.csv|BMFont fnt File(*.fnt)|*.fnt";
             if (savefiledialog.ShowDialog() == true)
             {
                 string saveFileName = savefiledialog.FileName;
@@ -291,6 +301,52 @@ namespace TiledGlyph
                         sw.Close();
                         fs.Close();
                         break;
+                    case 3:
+                        // bmfont fnt fine
+                        fs = new FileStream(saveFileName, FileMode.Create, FileAccess.Write);
+                        StreamWriter sw1 = new StreamWriter(fs);
+                        BMDrawer bmd2 = new BMDrawer();
+                        Table.XYWH[] XYWHS2 = bmd2.GetXYWHTable(characterTextBox.Text);
+                        //write fnt header
+                        int lineHeight = GlobalSettings.iTileHeight,
+                            baseHeight = GlobalSettings.iTileHeight, 
+                            scaleW = GlobalSettings.iImageWidth, 
+                            scaleH = GlobalSettings.iImageWidth, 
+                            pages = (int)XYWHS2[XYWHS2.Length - 1].page_num;
+                        string bmfont_name = System.IO.Path.GetFileName(GlobalSettings.fFontName);
+                        sw1.WriteLine(string.Format("info face=\"{0}\" bold=0 italic=0 charset=\"\" unicode=1 stretchH=100 smooth=1 aa=4 padding=0,0,0,0 spacing=0,0 outline=0", bmfont_name));
+                        sw1.WriteLine(string.Format("common lineHeight={0} base={1} scaleW={2} scaleH={3} pages={4} packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0",
+                                        lineHeight,
+                                        baseHeight,
+                                        scaleW,
+                                        scaleH,
+                                        pages)
+                                        
+                                        );
+                        
+                        sw1.WriteLine(string.Format("page id=0 file=\"{0}_0.png\"" , bmfont_name));
+                        sw1.WriteLine(string.Format("chars count={0}", XYWHS2.Length));
+                        foreach (var v in XYWHS2) {
+                            sw1.WriteLine(string.Format("char id={0}    x={1}     y={2}    width={3}     height={4}     xoffset={5}    yoffset={6}    xadvance={7}    page={8}  chnl=15",
+
+                                            v.charid , 
+                                            v.x_pos , 
+                                            v.y_pos , 
+                                            v.c_width , 
+                                            v.c_height , 
+                                            0, 
+                                            0 ,
+                                            v.c_width ,
+                                            v.page_num)
+                                            );
+                        }
+
+                        sw1.Close();
+                        fs.Close();
+
+
+                        break;
+
                     default:
                         break;
                 }
@@ -299,6 +355,11 @@ namespace TiledGlyph
             
 
 
+        }
+
+        private void characterTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            tmps.tmpstr = characterTextBox.Text;
         }
     }
 }

@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="611" d:DesignWidth="768">
     <Grid>
-        <TextBox x:Name="characterTextBox" HorizontalAlignment="Left" Height="251" Margin="33,76,0,0" TextWrapping="Wrap" Text=" !&quot;#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" VerticalAlignment="Top" Width="700" AcceptsReturn="True"/>
+        <TextBox x:Name="characterTextBox" HorizontalAlignment="Left" Height="251" Margin="33,76,0,0" TextWrapping="Wrap" Text=" !&quot;#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~" VerticalAlignment="Top" Width="700" AcceptsReturn="True" TextChanged="characterTextBox_TextChanged"/>
         <Button x:Name="buttonLoadFromFile" Content="Load From File" HorizontalAlignment="Left" Margin="33,45,0,0" VerticalAlignment="Top" Width="129" Click="buttonLoadFromFile_Click" ToolTip="Only Support (UTF-8 with BOM , Unicode with BOM)"/>
         <TextBlock x:Name="stringinfotextblock" HorizontalAlignment="Left" Margin="33,340,0,0" TextWrapping="Wrap" Text="0x5e Characters Loaded." VerticalAlignment="Top" Width="157"/>
         <Button x:Name="buttonSaveImage" Content="Save Image" HorizontalAlignment="Left" Margin="33,375,0,0" VerticalAlignment="Top" Width="107" Click="buttonSaveImage_Click"/>

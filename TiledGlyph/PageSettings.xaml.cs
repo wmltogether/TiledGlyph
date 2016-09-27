@@ -117,22 +117,7 @@ namespace TiledGlyph
             GlobalSettings.iImageHeight = imageHeight;
         }
 
-        private void textboxFontHeight_LostFocus(object sender, RoutedEventArgs e)
-        {
-            string tc = textboxFontHeight.Text.Trim();
-            if (!checkNumbic(tc))
-            {
-                textboxFontHeight.Text = "16";
-                return;
-            }
-            int fontHeight = Convert.ToInt32(tc);
-            if (fontHeight > 128)
-            {
-                textboxFontHeight.Text = "16";
-                return;
-            }
-            GlobalSettings.iFontHeight = fontHeight;
-        }
+
 
         private void comboboxRenderMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -145,12 +130,26 @@ namespace TiledGlyph
 
             GlobalSettings.iTileWidth = Convert.ToInt32(textboxTileWidth.Text.Trim());
             GlobalSettings.iTileHeight = Convert.ToInt32(textboxTileHeight.Text.Trim());
-            GlobalSettings.iFontHeight = Convert.ToInt32(textboxFontHeight.Text.Trim());
+            GlobalSettings.iFontHeight = (int)(Convert.ToInt32(textboxFontHeight.Text.Trim()) * 0.75);
             GlobalSettings.iGRenderMode = comboboxRenderMode.SelectedIndex;
             GlobalSettings.iImageWidth = Convert.ToInt32(textboxImageWidth.Text.Trim());
             GlobalSettings.iImageHeight = Convert.ToInt32(textboxImageHeight.Text.Trim());
             GlobalSettings.fFontName = textbox_FontName.Text;
             
+
+        }
+
+        private void outlineColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            string currentColor = outlineColorPicker.SelectedColor.ToString();
+            if (currentColor != null)
+            {
+                string c = currentColor;
+                textboxOutlineBrushColor.Text = c;
+                System.Drawing.ColorConverter colConvert = new System.Drawing.ColorConverter();
+                System.Drawing.Color color = (System.Drawing.Color)colConvert.ConvertFromString(c);
+                GlobalSettings.cShadowColor = color;
+            } 
 
         }
 
@@ -164,9 +163,10 @@ namespace TiledGlyph
                 System.Drawing.ColorConverter colConvert = new System.Drawing.ColorConverter();
                 System.Drawing.Color color = (System.Drawing.Color)colConvert.ConvertFromString(c);
                 GlobalSettings.cPenColor = color;
-            } 
+            }
 
         }
+
 
         private void bgColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
@@ -225,6 +225,22 @@ namespace TiledGlyph
                 GlobalSettings.globalSaveFmt = System.Drawing.Imaging.ImageFormat.Bmp;
             }
         }
+        private void textboxFontBold_LostFocus(object sender, RoutedEventArgs e)
+        {
+            string tc = textboxFontBold.Text.Trim();
+            if (!checkIntStr(tc))
+            {
+                textboxFontHeight.Text = "0.4";
+                return;
+            }
+            float font_bold = float.Parse(tc);
+            if (font_bold > 8.0)
+            {
+                textboxFontBold.Text = "8";
+                return;
+            }
+            GlobalSettings.iFontBold = font_bold;
+        }
 
         private void textboxRPositionX_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -272,6 +288,39 @@ namespace TiledGlyph
             {
                 GlobalSettings.bOptmizeAlpha = false;
             }
+        }
+
+        private void checkboxUseOutlineEffect_Checked(object sender, RoutedEventArgs e)
+        {
+            if (checkboxUseOutlineEffect.IsChecked == true)
+            {
+                GlobalSettings.bUseOutlineEffect = true;
+            }
+        }
+
+        private void checkboxUseOutlineEffect_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (checkboxUseOutlineEffect.IsChecked == false)
+            {
+                GlobalSettings.bUseOutlineEffect = false;
+            }
+        }
+
+        private void textboxFontHeight_LostFocus(object sender, RoutedEventArgs e)
+        {
+            string tc = textboxFontHeight.Text.Trim();
+            if (!checkNumbic(tc))
+            {
+                textboxFontHeight.Text = "16";
+                return;
+            }
+            int fontHeight = Convert.ToInt32(tc);
+            if (fontHeight > 128)
+            {
+                textboxFontHeight.Text = "16";
+                return;
+            }
+            GlobalSettings.iFontHeight = (int)(fontHeight * 0.75);
         }
 
 
